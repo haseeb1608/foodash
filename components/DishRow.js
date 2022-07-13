@@ -1,12 +1,27 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native'
-import Currency from "react-currency-formatter"
-import React, {useState} from 'react'
-import { urlFor } from '../sanity'
-import { MinusCircleIcon, PlusCircleIcon } from 'react-native-heroicons/solid'
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import Currency from "react-currency-formatter";
+import React, {useState} from 'react';
+import { urlFor } from '../sanity';
+import { MinusCircleIcon, PlusCircleIcon } from 'react-native-heroicons/solid';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToBasket, selectBasketItems, selectBasketItemsWithId, removeFromBasket } from '../features/basketSlice';
 
 const DishRow = ({ id, name, description, price, image }) => {
-
 const [isPressed, setIsPressed] = useState(false);
+const items = useSelector((state, id) => selectBasketItemsWithId(state, id));
+const dispatch = useDispatch();
+
+const addItemToBasket = () => {
+    dispatch(addToBasket({ id, name, description, price, image }));
+};
+
+
+const removeItemFromBasket = () => {
+
+    if (!items.length > 0) return;
+
+    dispatch(removeFromBasket({ id }));
+};
 
   return (
       <>
@@ -35,12 +50,18 @@ const [isPressed, setIsPressed] = useState(false);
         {isPressed && (
             <View className='bg-white px-4'>
                 <View className ='flex-row items-center space-x-2 pb-3'>
-                <TouchableOpacity>
-                    <MinusCircleIcon size={40}/>
+                <TouchableOpacity onPress={removeItemFromBasket}>
+                    <MinusCircleIcon 
+                    color={items.length > 0 ? "green" : "grey"}
+                    size={40}/>
                 </TouchableOpacity>
-                <Text>0</Text>
-                <TouchableOpacity>
-                    <PlusCircleIcon  size={40}/>
+
+                <Text>{items.length}</Text>
+                
+                <TouchableOpacity onPress={addItemToBasket} >
+                    <PlusCircleIcon 
+                    color="green"
+                    size={40}/>
                 </TouchableOpacity>
                 </View>
             </View>
