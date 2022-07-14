@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   items: [],
+  id: 0
 }
 
 export const basketSlice = createSlice({
@@ -9,7 +10,8 @@ export const basketSlice = createSlice({
   initialState,
   reducers: {
     addToBasket: (state, action) => {
-      state.items = [...state.items, action.payload]
+      state.items = [...state.items, action.payload],
+      state.id = action.payload.id
     },
     removeFromBasket: (state, action) => {
       const index = state.items.findIndex(
@@ -36,8 +38,10 @@ export const { addToBasket, removeFromBasket } = basketSlice.actions;
 
 export const selectBasketItems = (state) => state.basket.items;
 
-export const selectBasketItemsWithId = (state, id) => 
-  state.basket.items.filter((item) => item.id === id);
+export const selectBasketItemsWithId = (state) => {
+  return state.basket.items.filter((item) => item.id === state.basket.id);
+}
+  
 
 export const selectBasketTotal = (state) => state.basket.items.reduce((total, items) => total += items.price, 0)
 

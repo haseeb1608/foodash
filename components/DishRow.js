@@ -8,7 +8,7 @@ import { addToBasket, selectBasketItems, selectBasketItemsWithId, removeFromBask
 
 const DishRow = ({ id, name, description, price, image }) => {
 const [isPressed, setIsPressed] = useState(false);
-const items = useSelector((state, id) => selectBasketItemsWithId(state, id));
+const items = useSelector((state) => selectBasketItemsWithId(state));
 const dispatch = useDispatch();
 
 const addItemToBasket = () => {
@@ -52,11 +52,11 @@ const removeItemFromBasket = () => {
                 <View className ='flex-row items-center space-x-2 pb-3'>
                 <TouchableOpacity onPress={removeItemFromBasket}>
                     <MinusCircleIcon 
-                    color={items.length > 0 ? "green" : "grey"}
+                    color={items?.length > 0 ? "green" : "grey"}
                     size={40}/>
                 </TouchableOpacity>
 
-                <Text>{items.length}</Text>
+                <Text>{ items[0]?.id === id ? items?.length : 0}</Text>
                 
                 <TouchableOpacity onPress={addItemToBasket} >
                     <PlusCircleIcon 
